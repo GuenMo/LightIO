@@ -1,19 +1,27 @@
 # coding:utf-8
 
-from PySide import QtGui, QtCore
+try:
+    from PySide.QtGui import *
+    from PySide.QtCore import *
+    from shiboken import wrapInstance
+except:
+    from PySide2.QtGui import *
+    from PySide2.QtCore import *
+    from PySide2.QtWidgets import *
+    from shiboken2 import wrapInstance
+
 import os.path
 import maya.OpenMayaUI as OpenMayaUI
-from shiboken import wrapInstance
 
 import lightUtils
 reload(lightUtils)
 
 def getMayaWindow():
     ptr = OpenMayaUI.MQtUtil.mainWindow()
-    return wrapInstance(long(ptr), QtGui.QMainWindow)
+    return wrapInstance(long(ptr), QMainWindow)
 
 
-class LightUI(QtGui.QDialog):
+class LightUI(QDialog):
     def __init__(self, parent=getMayaWindow()):
         super(LightUI, self).__init__(parent)
     
@@ -23,13 +31,13 @@ class LightUI(QtGui.QDialog):
         self.setFixedHeight(60)
         
         # Layout
-        mainLayout = QtGui.QVBoxLayout()
+        mainLayout = QVBoxLayout()
         mainLayout.setContentsMargins(5,5,5,5)
         mainLayout.setSpacing(5)
-        mainLayout.setAlignment(QtCore.Qt.AlignTop)
+        mainLayout.setAlignment(Qt.AlignTop)
         
-        self.saveBttn = QtGui.QPushButton('Save Render Global')
-        self.loadBttn = QtGui.QPushButton('Load Render Global')
+        self.saveBttn = QPushButton('Save Render Global')
+        self.loadBttn = QPushButton('Load Render Global')
         mainLayout.addWidget(self.saveBttn)
         mainLayout.addWidget(self.loadBttn)
         
@@ -46,9 +54,9 @@ class LightUI(QtGui.QDialog):
         lightUtils.loadeRenderGlobal()
         
     def warningMessage(self, message):
-        warningMessage = QtGui.QMessageBox(self)
+        warningMessage = QMessageBox(self)
         warningMessage.setText(message)
-        warningMessage.setIcon(QtGui.QMessageBox.Critical)
+        warningMessage.setIcon(QMessageBox.Critical)
         warningMessage.exec_()
         
 def main():
